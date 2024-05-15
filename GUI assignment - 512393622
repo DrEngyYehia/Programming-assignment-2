@@ -1,1 +1,62 @@
+import tkinter as tk
+from tkinter import messagebox
 
+def calculate_loan():
+    loan_amount = float(loan_amount_entry.get())
+    years = int(years_entry.get())
+    interest_rate = {1: 17.58, 2: 17.71, 3: 18.27, 4: 18.91, 5: 19.56, 6: 20.21, 7: 20.84}
+
+    if years not in interest_rate:
+        messagebox.showerror("Error", "Invalid number of years")
+        return
+
+    interest_per_year = loan_amount * (interest_rate[years] / 100)
+    total_interests = interest_per_year * years
+    total_loan = loan_amount + total_interests
+    pay_per_month = total_loan / (years * 12)
+
+    result_label.config(text=f"Pay/Month: {round(pay_per_month)}")
+
+
+def reset_fields():
+    loan_amount_entry.delete(0, tk.END)
+    years_entry.delete(0, tk.END)
+    result_label.config(text="")
+
+
+window = tk.Tk()
+window.title("Bank Misr - Plan Your Loan Application")
+window.config(background="orange")
+window.geometry("500x320")
+
+jobs = ["Doctor", "Engineer", "Teacher", "Other"]
+
+job_label = tk.Label(window, text="Select Your Job:", bg="white")
+job_label.pack(pady=5)
+job_var = tk.StringVar(window)
+job_var.set(jobs[0])
+job_menu = tk.OptionMenu(window, job_var, *jobs)
+job_menu.config(bg="white")
+job_menu.pack(pady=5)
+
+loan_amount_label = tk.Label(window, text="Loan Amount:", bg="white")
+loan_amount_label.pack(pady=5)
+loan_amount_entry = tk.Entry(window)
+loan_amount_entry.pack()
+
+years_label = tk.Label(window, text="Years to Pay:", bg="white")
+years_label.pack(pady=5)
+years_entry = tk.Entry(window)
+years_entry.pack()
+
+calculate_button = tk.Button(window, text="Calculate", command=calculate_loan, bg="blue", fg="white")
+calculate_button.pack(pady=10)
+
+reset_button = tk.Button(window, text="Reset", command=reset_fields, bg="green", fg="white")
+reset_button.pack(pady=5)
+
+result_label = tk.Label(window, text="", bg="white", font=("Arial", 12, "bold"))
+result_label.pack()
+exit_button = tk.Button(window, text="Exit", command=window.destroy, bg="red", fg="white")
+exit_button.pack(pady=5)
+window.mainloop()
